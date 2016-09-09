@@ -181,10 +181,10 @@ endif
 LIBRARIES += glog gflags protobuf boost_system boost_filesystem m hdf5_hl hdf5
 
 # handle IO dependencies
-USE_LEVELDB ?= 1
-USE_LMDB ?= 1
-USE_OPENCV ?= 1
-USE_MATIO ?= 1
+USE_LEVELDB = 1
+USE_LMDB = 1
+USE_OPENCV = 1
+USE_MATIO = 1
 
 ifeq ($(USE_LEVELDB), 1)
 	LIBRARIES += leveldb snappy

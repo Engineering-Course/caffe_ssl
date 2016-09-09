@@ -636,11 +636,26 @@ void DataTransformer<Dtype>::TransformImgAndSeg(
       // for segmentation
       if (do_mirror) {
         top_index = h * data_width + data_width - 1 - w;
+        Dtype pixel = static_cast<Dtype>(label_ptr[label_index++]);
+        int pixel2 = int(pixel);
+        //LOG(INFO) << "pixel before:" << pixel;
+        switch(pixel2) {
+          case 14: pixel2 = 15; break;
+          case 15: pixel2 = 14; break;
+          case 16: pixel2 = 17; break;
+          case 17: pixel2 = 16; break;
+          case 18: pixel2 = 19; break;
+          case 19: pixel2 = 18; break;
+          default: break;
+        }
+        pixel = static_cast<Dtype>(pixel2);
+        transformed_label[top_index] = pixel;
+        //LOG(INFO) << "pixel after:" << pixel;
       } else {
         top_index = h * data_width + w;
+        Dtype pixel = static_cast<Dtype>(label_ptr[label_index++]);
+        transformed_label[top_index] = pixel;
       }
-      Dtype pixel = static_cast<Dtype>(label_ptr[label_index++]);
-      transformed_label[top_index] = pixel;
     }
   }
 }

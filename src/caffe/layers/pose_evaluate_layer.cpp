@@ -56,7 +56,6 @@ void PoseEvaluateLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
   // int channels = bottom[0]->channels();
   int height = bottom[0]->height();
   int width = bottom[0]->width();
-  int pose_len = top[0]->width();
   // LOG(INFO) << "pose_len: " << pose_len;
 
   std::vector<int > x_sum_vector[num_joint_];
@@ -74,7 +73,7 @@ void PoseEvaluateLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
         }
       }
     }
-    for (int w = 0; w < pose_len; ++w) {
+    for (int w = 0; w < num_joint_ * 2; ++w) {
       top_data[w] = 0;
     }
     for (int n = 0; n < num_joint_; n++) {
@@ -92,7 +91,6 @@ void PoseEvaluateLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
     bottom_data += bottom[0]->offset(1);
     top_data += top[0]->offset(1);
   }
-
 }
 
 INSTANTIATE_CLASS(PoseEvaluateLayer);

@@ -405,6 +405,7 @@ message LayerParameter {
   optional WindowDataParameter window_data_param = 129;
   optional MaskCreateParameter mask_create_param = 160;
   optional PoseEvaluateParameter pose_evaluate_param = 161;
+  optional PoseErrorParameter pose_error_param = 162;
 }
 
 // Message that stores parameters used to apply transformation
@@ -1154,6 +1155,10 @@ message MaskCreateParameter {
 }
 
 message PoseEvaluateParameter {
+  optional int32 num_joint = 1 [default = 9];
+}
+
+message PoseErrorParameter {
   optional int32 num_joint = 1 [default = 9];
 }
 

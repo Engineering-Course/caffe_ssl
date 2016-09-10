@@ -57,8 +57,12 @@ void PoseErrorLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
       y2 = bottom_data_two[j*2+1];
       total_distance += sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2));
     }
+    total_distance /= 20;
+    if (total_distance > 10) {
+      total_distance = 10;
+    }
     top_data[0] = total_distance;
-    LOG(INFO) << "total_distance: " << total_distance;
+    // LOG(INFO) << "total_distance: " << total_distance;
     // x1 = bottom_data_one[left_leg*2];
     // x2 = bottom_data_two[left_shoe*2];
     // y1 = bottom_data_one[left_leg*2+1];

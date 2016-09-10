@@ -33,6 +33,8 @@ void SoftmaxWithLossLayer<Dtype>::Forward_gpu(
   softmax_layer_->Forward(softmax_bottom_vec_, softmax_top_vec_);
   const Dtype* prob_data = prob_.gpu_data();
   const Dtype* label = bottom[1]->gpu_data();
+  const double pose_error = bottom[2]->cpu_data()[0];
+
   const int dim = prob_.count() / outer_num_;
   const int nthreads = outer_num_ * inner_num_;
   // Since this memory is not used for anything until it is overwritten
@@ -55,7 +57,7 @@ void SoftmaxWithLossLayer<Dtype>::Forward_gpu(
       has_ignore_label_) {
     caffe_gpu_asum(nthreads, counts, &valid_count);
   }
-  top[0]->mutable_cpu_data()[0] = loss / get_normalizer(normalization_,
+  top[0]->mutable_cpu_data()[0] = pose_error * loss / get_normalizer(normalization_,
                                                         valid_count);
   if (top.size() == 2) {
     top[1]->ShareData(prob_);

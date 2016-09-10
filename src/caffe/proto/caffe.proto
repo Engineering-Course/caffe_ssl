@@ -403,6 +403,8 @@ message LayerParameter {
   optional TileParameter tile_param = 138;
   optional UniqueLabelParameter unique_label_param = 150;
   optional WindowDataParameter window_data_param = 129;
+  optional MaskCreateParameter mask_create_param = 160;
+  optional PoseEvaluateParameter pose_evaluate_param = 161;
 }
 
 // Message that stores parameters used to apply transformation
@@ -1145,6 +1147,14 @@ message SegAccuracyParameter {
   // will ignore pixels with this value when computing accuracy
   repeated int32 ignore_label = 2;
   optional bool reset = 3 [default = true];
+}
+
+message MaskCreateParameter {
+  optional int32 num_cls = 1 [default = 20];
+}
+
+message PoseEvaluateParameter {
+  optional int32 num_joint = 1 [default = 9];
 }
 
 message SigmoidParameter {

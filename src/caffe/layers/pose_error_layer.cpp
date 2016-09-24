@@ -45,7 +45,7 @@ void PoseErrorLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
   // int height = bottom[0]->height();
   // int width = bottom[0]->width();
   int x1, x2, y1, y2;
-  // int left_leg = 5, right_leg = 6, left_shoe = 7, right_shoe = 8;
+  //int left_leg = 5, right_leg = 6, left_shoe = 7, right_shoe = 8;
 
 
   for (int i = 0; i < num; ++i) {
@@ -57,17 +57,18 @@ void PoseErrorLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
       y2 = bottom_data_two[j*2+1];
       total_distance += sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2));
     }
-    total_distance /= 20;
+    //left_leg_x = bottom_data_one[left_leg*2];
+    //left_leg_y = bottom_data_one[left_leg*2+1];
+    //left_shoe_x = bottom_data_two[left_shoe*2];
+    //left_shoe_y = bottom_data_two[left_shoe*2+1];
+    // total_distance += sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2));
+
+    total_distance /= 10;
     if (total_distance > 10) {
       total_distance = 10;
     }
     top_data[0] = total_distance;
     // LOG(INFO) << "total_distance: " << total_distance;
-    // x1 = bottom_data_one[left_leg*2];
-    // x2 = bottom_data_two[left_shoe*2];
-    // y1 = bottom_data_one[left_leg*2+1];
-    // y2 = bottom_data_two[left_shoe*2+1];
-    // total_distance += sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2));
     bottom_data_one += bottom[0]->offset(1);
     bottom_data_two += bottom[1]->offset(1);
     top_data += top[0]->offset(1);

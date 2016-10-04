@@ -33,7 +33,10 @@ void SoftmaxWithLossLayer<Dtype>::Forward_gpu(
   softmax_layer_->Forward(softmax_bottom_vec_, softmax_top_vec_);
   const Dtype* prob_data = prob_.gpu_data();
   const Dtype* label = bottom[1]->gpu_data();
-  const double pose_error = bottom[2]->cpu_data()[0];
+  double pose_error = 1.0;
+  if (bottom.size() == 3) {
+    pose_error = bottom[2]->cpu_data()[0];
+  }
 
   const int dim = prob_.count() / outer_num_;
   const int nthreads = outer_num_ * inner_num_;

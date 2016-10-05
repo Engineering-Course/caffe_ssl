@@ -406,6 +406,9 @@ message LayerParameter {
   optional MaskCreateParameter mask_create_param = 160;
   optional PoseEvaluateParameter pose_evaluate_param = 161;
   optional PoseErrorParameter pose_error_param = 162;
+  optional MergeFirstParameter merge_first_param = 163;
+  optional MergeLabelParameter merge_label_param = 164;
+  optional MergeSecondParameter merge_second_param = 165;
 }
 
 // Message that stores parameters used to apply transformation
@@ -722,7 +725,18 @@ message DummyDataParameter {
   repeated uint32 height = 4;
   repeated uint32 width = 5;
 }
-
+// Message that stores parameters used by MergeFirstLayer
+message MergeFirstParameter {
+  required int32 num_labels = 1 [default = 6];
+}
+// Message that stores parameters used by MergeLabelLayer
+message MergeLabelParameter {
+  required int32 order = 1 [default = 2];
+}
+// Message that stores parameters used by MergeSecondLayer
+message MergeSecondParameter {
+  required int32 num_labels = 1 [default = 4];
+}  
 message EltwiseParameter {
   enum EltwiseOp {
     PROD = 0;

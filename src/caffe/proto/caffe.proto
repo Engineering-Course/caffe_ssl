@@ -1174,6 +1174,7 @@ message PoseEvaluateParameter {
 
 message PoseErrorParameter {
   optional int32 num_joint = 1 [default = 9];
+  required int32 error_order = 2 [default = 1];
 }
 
 message SigmoidParameter {

@@ -22,17 +22,17 @@ void PoseEvaluateLayer<Dtype>::Reshape(
   const vector<Blob<Dtype>*>& bottom, const vector<Blob<Dtype>*>& top) {
   CHECK_EQ(bottom[0]->channels(), 1)
     << "The bottom channels should be 1.";
-  // top[0]->Reshape(bottom[0]->num(), 1, bottom[0]->height(), bottom[0]->width());
   top[0]->Reshape(bottom[0]->num(), 1, 1, num_joint_ * 2);  
 }
-
-int clsToJoint(int cls_) {
+int clsToJointFirst(int cls_) {
   switch(cls_) {
     case 1:  return 0; break;
     case 2:  return 0; break;
+    case 4:  return 0; break;
     case 13: return 0; break;
     case 5:  return 1; break;
     case 7:  return 1; break;
+    case 11: return 1; break;
     case 9:  return 2; break;
     case 12: return 2; break;
     case 14: return 3; break;
@@ -44,7 +44,34 @@ int clsToJoint(int cls_) {
     default: return -1; break;
   }
 }
-
+int clsToJointSecond(int cls_) {
+  switch(cls_) {
+    case 4:  return 0; break;
+    case 3:  return 1; break;
+    case 2:  return 2; break;
+    default: return -1; break;
+  }
+}
+int clsToJointThird(int cls_) {
+  switch(cls_) {
+    case 1:  return 0; break;
+    case 3:  return 0; break;
+    case 4:  return 0; break;
+    case 2:  return 1; break;
+    default: return -1; break;
+  }
+}
+int selectJointFun(int num_joint_, int cls_) {
+  if (num_joint_ == 9) {
+    return clsToJointFirst(cls_);
+  } else if (num_joint_ == 3) {
+    return clsToJointSecond(cls_);
+  } else if (num_joint_ == 2) {
+    return clsToJointThird(cls_);
+  } else {
+    LOG(FATAL) << "Unexpected num_joint " << num_joint_;
+  }
+}
 template <typename Dtype>
 void PoseEvaluateLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
     const vector<Blob<Dtype>*>& top) {
@@ -66,8 +93,8 @@ void PoseEvaluateLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
     for (int h = 0; h < height; ++h) {
       for (int w = 0; w < width; ++w) {
         cls_ =  bottom_data[h * width + w];
-        joint_id = clsToJoint(cls_);
-        if (joint_id >= 0 && joint_id < 9) {
+        joint_id = selectJointFun(num_joint_, cls_);
+        if (joint_id >= 0 && joint_id < num_joint_) {
           x_sum_vector[joint_id].push_back(w);
           y_sum_vector[joint_id].push_back(h);
         }

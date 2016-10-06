@@ -22,7 +22,7 @@ class PoseErrorLayer : public Layer<Dtype> {
 
   virtual inline const char* type() const { return "PoseError"; }
 
-  virtual inline int ExactNumBottomBlobs() const { return 2; }
+  virtual inline int MinBottomBlobs() const { return 2; }
   virtual inline int ExactNumTopBlobs() const { return 1; }
 
  protected:
@@ -34,7 +34,8 @@ class PoseErrorLayer : public Layer<Dtype> {
   virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
       const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {
   }
-  int num_joint_;    
+  int num_joint_;
+  int error_order_;    
 };
 
 }  // namespace caffe

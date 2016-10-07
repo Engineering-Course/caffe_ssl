@@ -85,10 +85,14 @@ void PoseErrorLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
       total_distance = 10;
     }
     top_data[0] = total_distance;
-    LOG(INFO) << "total_distance: " << total_distance;
+    //LOG(INFO) << "total_distance: " << total_distance;
     bottom_data_one += bottom[0]->offset(1);
     bottom_data_two += bottom[1]->offset(1);
     top_data += top[0]->offset(1);
+    if (error_order_ == 2) {
+      bottom_data_three += bottom[2]->offset(1);
+      bottom_data_four += bottom[3]->offset(1);
+    }
   }
 }
 

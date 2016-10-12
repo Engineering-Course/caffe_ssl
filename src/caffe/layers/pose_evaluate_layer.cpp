@@ -78,9 +78,7 @@ void PoseEvaluateLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
 
   const Dtype* bottom_data = bottom[0]->cpu_data();
   Dtype* top_data = top[0]->mutable_cpu_data();
-
   int num = bottom[0]->num();
-  // int channels = bottom[0]->channels();
   int height = bottom[0]->height();
   int width = bottom[0]->width();
   // LOG(INFO) << "pose_len: " << pose_len;

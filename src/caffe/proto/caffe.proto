@@ -411,6 +411,7 @@ message LayerParameter {
   optional MergeSecondParameter merge_second_param = 165;
   optional PoseCreateParameter pose_create_param = 166;
   optional HeatmapDataParameter heatmap_data_param = 167;
+  optional CreateGanParameter create_gan_param = 168;
 }
 
 // Message that stores parameters used to apply transformation
@@ -1202,6 +1203,9 @@ message PoseEvaluateParameter {
 message PoseErrorParameter {
   optional int32 num_joint = 1 [default = 9];
   required int32 error_order = 2 [default = 1];
+}
+message CreateGanParameter {
+  required int32 gan_label = 1 [default = 0];
 }
 
 message SigmoidParameter {

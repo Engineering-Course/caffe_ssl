@@ -22,7 +22,6 @@ void CreateGanLayer<Dtype>::Reshape(
   const vector<Blob<Dtype>*>& bottom, const vector<Blob<Dtype>*>& top) {
 
   top[0]->Reshape(bottom[0]->num(), 1, 1, 1);
-
 }
 
 template <typename Dtype>

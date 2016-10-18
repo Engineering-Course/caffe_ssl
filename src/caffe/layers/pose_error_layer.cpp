@@ -81,9 +81,9 @@ void PoseErrorLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
     } else {
       LOG(FATAL) << "Unexpected error_order: " << error_order_;
     }
-    if (total_distance > 10) {
-      total_distance = 10;
-    }
+    // if (total_distance > 10) {
+    //   total_distance = 10;
+    // }
     top_data[0] = total_distance;
     //LOG(INFO) << "total_distance: " << total_distance;
     bottom_data_one += bottom[0]->offset(1);

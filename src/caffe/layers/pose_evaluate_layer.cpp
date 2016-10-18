@@ -118,6 +118,16 @@ void PoseEvaluateLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
   }
 }
 
+//virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+//    const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {
+//
+//  const Dtype* top_diff = top[0]->cpu_diff();
+//  Dtype* bottom_diff = bottom[0]->mutable_cpu_diff();
+////  if (propagate_down[0]) {
+//    
+////  }
+//}
+//
 INSTANTIATE_CLASS(PoseEvaluateLayer);
 REGISTER_LAYER_CLASS(PoseEvaluate);
 

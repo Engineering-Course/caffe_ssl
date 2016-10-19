@@ -28,7 +28,7 @@ void RewardLossLayer<Dtype>::Forward_cpu(
   Dtype* top_data = top[0]->mutable_cpu_data();
   int num = bottom[0]->num();
   for (int i = 0; i < num; ++i) {
-    top_data[i] = bottom_data[i * 2];
+    top_data[i] = bottom_data[i * 2] * 0.000001;
   }
 }
 
@@ -40,12 +40,18 @@ void RewardLossLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>*>& top,
     LOG(FATAL) << this->type() << " Layer cannot backpropagate to label inputs.";
   }
   const Dtype* top_data = top[0]->cpu_data();
-  const Dtype* top_diff = top[0]->cpu_diff();
   if (propagate_down[1]) {
     Dtype* bottom_diff = bottom[1]->mutable_cpu_diff();
-    const int count = bottom[1]->count();
-    for (int i = 0; i < count; ++i) {
-      bottom_diff[i] = top_data[0];
+    const int num = bottom[1]->num();
+    const int height = bottom[1]->height();
+    const int width = bottom[1]->width();
+    for (int i = 0; i < num; ++i) {
+      for (int h = 0; h < height; ++h) {
+        for (int w = 0; w < width; ++w) {
+          int index = i * height * width + h * width + w;
+          bottom_diff[index] = top_data[i];
+        }
+      }
     }
   }
   

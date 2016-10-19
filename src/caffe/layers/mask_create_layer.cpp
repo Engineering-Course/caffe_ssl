@@ -60,6 +60,36 @@ void MaskCreateLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
   }
 }
 
+template <typename Dtype>
+void MaskCreateLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>*>& top,
+    const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {
+  if (propagate_down[0]) {
+    const Dtype* top_data = top[0]->cpu_data();
+    const Dtype* top_diff = top[0]->cpu_diff();
+    Dtype* bottom_diff = bottom[0]->mutable_cpu_diff();
+    const int num = bottom[0]->num();
+    const int count = top[0]->count();
+    const int height = bottom[0]->height();
+    const int width = bottom[0]->width();
+    int data_index;
+    for (int i = 0; i < count; ++i) {
+      bottom_diff[i] = 0;
+    }
+    for (int i = 0; i < num; ++i) {
+      for (int h = 0; h < height; ++h) {
+        for (int w = 0; w < width; ++w) {
+          int b_c = top_data[h * width + w];
+          data_index = (b_c * height + h) * width + w;
+          int index = i * height * width + h * width + w;
+          bottom_diff[data_index] = top_diff[index];
+        }
+      }
+      top_data += top[0]->offset(1);
+      bottom_diff += bottom[0]->offset(1);
+    }
+  }
+}
+
 INSTANTIATE_CLASS(MaskCreateLayer);
 REGISTER_LAYER_CLASS(MaskCreate);
 

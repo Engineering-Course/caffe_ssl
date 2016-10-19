@@ -412,6 +412,7 @@ message LayerParameter {
   optional PoseCreateParameter pose_create_param = 166;
   optional HeatmapDataParameter heatmap_data_param = 167;
   optional CreateGanParameter create_gan_param = 168;
+  optional RewardLossParameter reward_loss_param = 169;
 }
 
 // Message that stores parameters used to apply transformation
@@ -1207,7 +1208,9 @@ message PoseErrorParameter {
 message CreateGanParameter {
   required int32 gan_label = 1 [default = 0];
 }
-
+message RewardLossParameter {
+  
+}
 message SigmoidParameter {
   enum Engine {
     DEFAULT = 0;

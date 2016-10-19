@@ -32,8 +32,7 @@ class MaskCreateLayer : public Layer<Dtype> {
 
   /// @brief Not implemented -- AccuracyLayer cannot be used as a loss.
   virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {
-  }
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
   int num_cls_;
       
 };

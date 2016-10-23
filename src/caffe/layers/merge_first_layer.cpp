@@ -104,14 +104,19 @@ void MergeFirstLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>*>& top,
     const int num = bottom[0]->num();
     const int height = bottom[0]->height();
     const int width = bottom[0]->width();
+    const int channels = bottom[0]->channels();
     int data_index;
 
     for (int i = 0; i < num; ++i) {
       for (int h = 0; h < height; ++h) {
         for (int w = 0; w < width; ++w) {
-            int c = 0;
+          for (int c = 0; c < channels; ++c) {
             data_index = (c * height + h) * width + w;
-            bottom_diff[data_index] = top_diff[data_index];
+            bottom_diff[data_index] = 0;
+            if (c == 0) {
+              bottom_diff[data_index] = top_diff[data_index];
+            }
+          }
         }
       }
       for (int h = 0; h < height; ++h) {
@@ -119,13 +124,13 @@ void MergeFirstLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>*>& top,
           for (int c = 1; c < num_labels_; ++c) {
             data_index = (c * height + h) * width + w;
             if (c == 1) {
-              bottom_diff[(3 * height + h) * width + w] = top_diff[data_index];
+              //bottom_diff[(3 * height + h) * width + w] = top_diff[data_index];
               bottom_diff[(14 * height + h) * width + w] = top_diff[data_index];
               bottom_diff[(15 * height + h) * width + w] = top_diff[data_index];
             } else if (c == 2) {
-              bottom_diff[(8 * height + h) * width + w] = top_diff[data_index];
-              bottom_diff[(9 * height + h) * width + w] = top_diff[data_index];
-              bottom_diff[(12 * height + h) * width + w] = top_diff[data_index];
+              //bottom_diff[(8 * height + h) * width + w] = top_diff[data_index];
+              //bottom_diff[(9 * height + h) * width + w] = top_diff[data_index];
+              //bottom_diff[(12 * height + h) * width + w] = top_diff[data_index];
               bottom_diff[(16 * height + h) * width + w] = top_diff[data_index];
               bottom_diff[(17 * height + h) * width + w] = top_diff[data_index];
               bottom_diff[(18 * height + h) * width + w] = top_diff[data_index];
@@ -133,11 +138,11 @@ void MergeFirstLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>*>& top,
             } else if (c == 3) {
               bottom_diff[(5 * height + h) * width + w] = top_diff[data_index];
               bottom_diff[(7 * height + h) * width + w] = top_diff[data_index];
-              bottom_diff[(11 * height + h) * width + w] = top_diff[data_index];
+              //bottom_diff[(11 * height + h) * width + w] = top_diff[data_index];
             } else if (c == 4) {
-              bottom_diff[(1 * height + h) * width + w] = top_diff[data_index];
+              //bottom_diff[(1 * height + h) * width + w] = top_diff[data_index];
               bottom_diff[(2 * height + h) * width + w] = top_diff[data_index];
-              bottom_diff[(4 * height + h) * width + w] = top_diff[data_index];
+              //bottom_diff[(4 * height + h) * width + w] = top_diff[data_index];
               bottom_diff[(13 * height + h) * width + w] = top_diff[data_index];
             } else if (c == 5) {
               bottom_diff[(6 * height + h) * width + w] = top_diff[data_index];

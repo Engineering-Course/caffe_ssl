@@ -92,8 +92,6 @@ void SoftmaxWithLossLayer<Dtype>::Forward_cpu(
   softmax_layer_->Forward(softmax_bottom_vec_, softmax_top_vec_);
   const Dtype* prob_data = prob_.cpu_data();
   const Dtype* label = bottom[1]->cpu_data();
-//  const double pose_error = bottom[2]->cpu_data()[0];
-//  LOG(INFO) << "pose_error: " << pose_error;
 
   int dim = prob_.count() / outer_num_;
   int count = 0;
@@ -111,8 +109,6 @@ void SoftmaxWithLossLayer<Dtype>::Forward_cpu(
       ++count;
     }
   }
-//  LOG(INFO) << "loss before: " << loss / get_normalizer(normalization_, count);
-//  LOG(INFO) << "loss after: " << pose_error * loss / get_normalizer(normalization_, count); 
   top[0]->mutable_cpu_data()[0] = loss / get_normalizer(normalization_, count);
   if (top.size() == 2) {
     top[1]->ShareData(prob_);

@@ -14,16 +14,14 @@ template <typename Dtype>
 void PoseCreateLayer<Dtype>::LayerSetUp(
   const vector<Blob<Dtype>*>& bottom, const vector<Blob<Dtype>*>& top) {
   	num_joint_ = this->layer_param_.pose_create_param().num_joint();
-    label_value_ = this->layer_param_.pose_create_param().label_value();
 }
 
 template <typename Dtype>
 void PoseCreateLayer<Dtype>::Reshape(
   const vector<Blob<Dtype>*>& bottom, const vector<Blob<Dtype>*>& top) {
-  CHECK_EQ(bottom[0]->channels(), num_joint_)
-		<< "The bottom channels and num of classes should have the same number.";
-  top[0]->Reshape(bottom[0]->num(), 1, 1, num_joint_ * 2);
-  top[1]->Reshape(bottom[0]->num(), 1, 1, 1);
+  CHECK_EQ(bottom[0]->width(), num_joint_ * 2)
+		<< "The bottom width and num of joint should have the same number.";
+  top[0]->Reshape(bottom[1]->num(), num_joint_, bottom[1]->height(), bottom[1]->width());
 }
 
 template <typename Dtype>
@@ -32,41 +30,29 @@ void PoseCreateLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
 
   const Dtype* bottom_data = bottom[0]->cpu_data();
   Dtype* top_data = top[0]->mutable_cpu_data();
-  Dtype* top_label = top[1]->mutable_cpu_data();
 
-  int num = bottom[0]->num();
-  int height = bottom[0]->height();
-  int width = bottom[0]->width();
-  int data_index;
+  int num = bottom[1]->num();
+  int height = bottom[1]->height();
+  int width = bottom[1]->width();
+  float sigma = 1.0;
 
   for (int i = 0; i < num; ++i) {
-    for (int c = 0; c < num_joint_; ++c) {
-      double max_index = bottom_data[(c * height) * width];
-      int max_x = 0, max_y = 0;
-      for (int h = 0; h < height; ++h) {
-        for (int w = 0; w < width; ++w) {
-          data_index = (c * height + h) * width + w;
-          if (bottom_data[data_index] > max_index) {
-            max_index = bottom_data[data_index];
-            max_x = w;
-            max_y = h;
-          }
+    for (int n = 0; n < num_joint_; ++n) {
+      int center_x = bottom_data[n * 2];
+      int center_y = bottom_data[n * 2 + 1];
+      for (int yy = 0; yy < height; yy++) {
+        for (int xx = 0; xx < width; xx++) {
+          int index = (n * height + yy) * width + xx;
+          float gaussian = (1 / (sigma * sqrt(2 * M_PI))) *
+                exp(-0.5 * (pow(yy-center_y, 2.0) + pow(xx-center_x, 2.0)) *
+                pow(1/sigma, 2.0));
+          gaussian = 4 * gaussian;
+          top_data[index] = gaussian;
         }
       }
-      // LOG(INFO) << "point1: " << c << "  w: " << max_x << "  y: " << max_y;
-      top_data[c*2] = max_x;
-      top_data[c*2+1] = max_y;
-    }
-    if (label_value_ == 1) {
-      top_label[0] = 1;
-    } else if (label_value_ == 0){
-      top_label[0] = 0;
-    } else {
-      LOG(FATAL) << "Unexpected label_value: " << label_value_;
     }
     bottom_data += bottom[0]->offset(1);
     top_data += top[0]->offset(1);
-    top_label += top[1]->offset(1);
   }
 }
 

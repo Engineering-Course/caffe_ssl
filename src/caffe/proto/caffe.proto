@@ -413,6 +413,7 @@ message LayerParameter {
   optional HeatmapDataParameter heatmap_data_param = 167;
   optional CreateGanParameter create_gan_param = 168;
   optional RewardLossParameter reward_loss_param = 169;
+  optional HeatmapErrorParameter heatmap_error_param = 170;
 }
 
 // Message that stores parameters used to apply transformation
@@ -1194,7 +1195,6 @@ message MaskCreateParameter {
 }
 message PoseCreateParameter {
   optional int32 num_joint = 1 [default = 16];
-  required int32 label_value = 2 [default = 0];
 }
 
 message PoseEvaluateParameter {
@@ -1205,6 +1205,11 @@ message PoseErrorParameter {
   optional int32 num_joint = 1 [default = 9];
   required int32 error_order = 2 [default = 1];
 }
+
+message HeatmapErrorParameter {
+  optional float scale = 1 [default = 1.0];
+}
+
 message CreateGanParameter {
   required int32 gan_label = 1 [default = 0];
 }

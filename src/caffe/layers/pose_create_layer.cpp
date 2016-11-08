@@ -34,7 +34,7 @@ void PoseCreateLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
   int num = bottom[1]->num();
   int height = bottom[1]->height();
   int width = bottom[1]->width();
-  float sigma = 1.0;
+  float sigma = 6;  //////////// 1.0;
 
   for (int i = 0; i < num; ++i) {
     for (int n = 0; n < num_joint_; ++n) {
@@ -43,11 +43,15 @@ void PoseCreateLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
       for (int yy = 0; yy < height; yy++) {
         for (int xx = 0; xx < width; xx++) {
           int index = (n * height + yy) * width + xx;
-          float gaussian = (1 / (sigma * sqrt(2 * M_PI))) *
-                exp(-0.5 * (pow(yy-center_y, 2.0) + pow(xx-center_x, 2.0)) *
-                pow(1/sigma, 2.0));
-          gaussian = 4 * gaussian;
-          top_data[index] = gaussian;
+          if (center_x == 0 && center_y == 0) {
+            top_data[index] = 0;
+          } else {
+            float gaussian = (1 / (sigma * sqrt(2 * M_PI))) *
+                  exp(-0.5 * (pow(yy-center_y, 2.0) + pow(xx-center_x, 2.0)) *
+                  pow(1/sigma, 2.0));
+            gaussian = 10 * gaussian;     ///4
+            top_data[index] = gaussian;
+          }
         }
       }
     }

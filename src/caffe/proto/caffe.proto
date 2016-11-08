@@ -414,6 +414,7 @@ message LayerParameter {
   optional CreateGanParameter create_gan_param = 168;
   optional RewardLossParameter reward_loss_param = 169;
   optional HeatmapErrorParameter heatmap_error_param = 170;
+  optional HeatmapDrawParameter heatmap_draw_param = 171;
 }
 
 // Message that stores parameters used to apply transformation
@@ -955,6 +956,11 @@ message MatReadParameter {
   optional string source = 2 [default = ""];
   optional int32 strip = 3 [default = 0];
   optional int32 batch_size = 4 [default = 1];
+}
+
+message HeatmapDrawParameter {
+  required string prefix = 1;
+  optional string source = 2 [default = ""];
 }
 
 message MatWriteParameter {

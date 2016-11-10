@@ -889,6 +889,8 @@ message ImageDataParameter {
   // data.
   optional bool mirror = 6 [default = false];
   optional string root_folder = 12 [default = ""];
+  optional string posefile = 20 [default = ""];
+  optional int32 num_pose = 21 [default = 9];
 }
 
 message InfogainLossParameter {

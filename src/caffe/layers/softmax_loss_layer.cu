@@ -43,6 +43,7 @@ __global__ void SoftmaxLossWithPoseForwardGPU(const int nthreads,
       loss[index] = -log(max(prob_data[n * dim + label_value * spatial_dim + s],
                       Dtype(FLT_MIN)));
       loss[index] *= double(pose_error[n]);
+      //loss[index] += double(pose_error[n]);
       counts[index] = 1;
     }
   }

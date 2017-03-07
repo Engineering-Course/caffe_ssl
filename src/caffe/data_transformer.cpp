@@ -632,7 +632,8 @@ void DataTransformer<Dtype>::TransformImgAndSeg(
           }
         }
       }
-
+      // Modified by Clay Gong
+      // change the corresponding left/right lable id for LIP dataset
       // for segmentation
       if (do_mirror) {
         top_index = h * data_width + data_width - 1 - w;

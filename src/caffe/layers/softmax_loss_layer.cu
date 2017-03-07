@@ -43,7 +43,6 @@ __global__ void SoftmaxLossWithPoseForwardGPU(const int nthreads,
       loss[index] = -log(max(prob_data[n * dim + label_value * spatial_dim + s],
                       Dtype(FLT_MIN)));
       loss[index] *= double(pose_error[n]);
-      //loss[index] += double(pose_error[n]);
       counts[index] = 1;
     }
   }
@@ -70,6 +69,9 @@ void SoftmaxWithLossLayer<Dtype>::Forward_gpu(
   // to avoid having to allocate additional GPU memory.
   Dtype* counts = prob_.mutable_gpu_diff();
   // NOLINT_NEXT_LINE(whitespace/operators)
+
+  // modified by Clay Gong
+  // add structure-sensitive loss
   if (bottom.size() == 3) {
     SoftmaxLossWithPoseForwardGPU<Dtype><<<CAFFE_GET_BLOCKS(nthreads),
       CAFFE_CUDA_NUM_THREADS>>>(nthreads, prob_data, label, loss_data,

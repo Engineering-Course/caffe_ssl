@@ -523,7 +523,16 @@ void DataTransformer<Dtype>::TransformImgAndSeg(
       }
     }
   }
-
+//------------add to test resnet-------------------
+  int max_side = std::max(img_height, img_width);
+  if (max_side > crop_height) {
+    float scale_ = crop_height * 1.0 / max_side;
+    int new_img_height = floor(img_height * scale_);
+    int new_img_width = floor(img_width * scale_);
+    cv::resize(cv_img_seg[0], cv_img_seg[0], cv::Size(new_img_width, new_img_height), 0, 0, cv::INTER_LINEAR);
+    cv::resize(cv_img_seg[1], cv_img_seg[1], cv::Size(new_img_width, new_img_height), 0, 0, cv::INTER_NEAREST);
+  }
+//---------------end test---------------------------
   // start to perform transformation
   cv::Mat cv_cropped_img;
   cv::Mat cv_cropped_seg;

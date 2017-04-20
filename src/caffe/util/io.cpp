@@ -72,7 +72,7 @@ void WriteProtoToBinaryFile(const Message& proto, const char* filename) {
 #ifdef USE_OPENCV
 cv::Mat ReadImageToCVMat(const string& filename,
 			 const int height, const int width, const bool is_color,
-			 int* img_height, int* img_width) {
+			 int* img_height, int* img_width, const bool seg) {
   cv::Mat cv_img;
   int cv_read_flag = (is_color ? CV_LOAD_IMAGE_COLOR :
     CV_LOAD_IMAGE_GRAYSCALE);
@@ -82,7 +82,11 @@ cv::Mat ReadImageToCVMat(const string& filename,
     return cv_img_origin;
   }
   if (height > 0 && width > 0) {
-    cv::resize(cv_img_origin, cv_img, cv::Size(width, height));
+    if (!seg) {
+        cv::resize(cv_img_origin, cv_img, cv::Size(width, height));
+    } else {
+        cv::resize(cv_img_origin, cv_img, cv::Size(width, height), 0, 0, cv::INTER_NEAREST);
+    }
   } else {
     cv_img = cv_img_origin;
   }

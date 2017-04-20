@@ -207,7 +207,7 @@ void ImageSegDataLayer<Dtype>::load_batch(Batch<Dtype>* batch) {
     }
     if (label_type == ImageDataParameter_LabelType_PIXEL) {
       cv_img_seg.push_back(ReadImageToCVMat(root_folder + lines_[lines_id_].second,
-					    new_height, new_width, false));
+					    new_height, new_width, false, &img_row, &img_col, true));
       if (!cv_img_seg[1].data) {
 	DLOG(INFO) << "Fail to load seg: " << root_folder + lines_[lines_id_].second;
       }

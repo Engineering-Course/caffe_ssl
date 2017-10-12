@@ -1,6 +1,11 @@
 # This list is required for static linking and exported to CaffeConfig.cmake
 set(Caffe_LINKER_LIBS "")
 
+# ---[MATIO]
+find_package(MATIO REQUIRED)
+include_directories(SYSTEM ${MATIO_INCLUDE_DIR})
+list(APPEND Caffe_LINKER_LIBS ${MATIO_LIBRARIES})
+
 # ---[ Boost
 find_package(Boost 1.46 REQUIRED COMPONENTS system thread filesystem)
 include_directories(SYSTEM ${Boost_INCLUDE_DIR})
